@@ -1,0 +1,7 @@
+query to find missing source_ids in au_v_elm that are not in the source table
+
+select distinct a.source_id
+from au_v_elms as a
+left join sources as s on a.source_id = s.object_id
+where s.object_id is null
+order by a.source_id;
