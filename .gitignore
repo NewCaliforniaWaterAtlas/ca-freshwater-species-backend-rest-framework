@@ -9,6 +9,7 @@ wkg/*Database_*
 
 # Twelve Factor
 .env
+staticfiles/
 
 # GitHub boilerplate below
 #
