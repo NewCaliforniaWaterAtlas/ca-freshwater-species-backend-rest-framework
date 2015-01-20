@@ -6,7 +6,16 @@ class ElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Element
         fields = (
+            'listed',
+            'vulnerable',
             'group_field',
+            'elm_comnam',
+            'elm_scinam',
+            'elm_scin_1',
+            'elm_scin_2',
+            'elm_scin_3',
+            'elm_scin_4',
+            'endemic',
             'vulnerable',
             'endemic'
         )
@@ -25,20 +34,9 @@ class SourceSerializer(serializers.ModelSerializer):
         model = Source
         fields = (
             'source_name',
-            'sourcegrp_name',
-            'use_agree',
-            'permission_request_needed',
-            'permission_contact_name',
-            'permission_contact_email',
-            'permission_status',
-            'permission',
-            'comment_id',
             'citation',
             'weblink',
             'pre_release_review',
-            'aggregator',
-            'count_huc12s',
-            'count_elm_ids',
         )
 
 class AuVElmSerializer(serializers.ModelSerializer):
