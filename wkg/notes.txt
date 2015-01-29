@@ -5,3 +5,13 @@ from au_v_elms as a
 left join sources as s on a.source_id = s.object_id
 where s.object_id is null
 order by a.source_id;
+
+SELECT DISTINCT (huc_12, elm_id) from au_v_elms;
+
+SELECT DISTINCT (elm_id, huc_12) from au_v_elms;
+
+opening page stats by watershed, all species:
+SELECT COUNT(DISTINCT (elm_id, huc_12)), huc_12
+FROM au_v_elms
+GROUP BY huc_12
+ORDER BY huc_12;

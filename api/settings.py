@@ -63,7 +63,7 @@ POSTGIS_VERSION = (2, 1, 0)
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'HOST': '',
+        'HOST': 'localhost',
         'NAME': 'ca_freshwater_species',
         'USER': os.environ['DB_USER'],
         'PASSWORD': os.environ['DB_PASSWORD'],

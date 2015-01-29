@@ -6,18 +6,17 @@ class ElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Element
         fields = (
-            'listed',
-            'vulnerable',
-            'group_field',
-            'elm_comnam',
+            'elm_id',
             'elm_scinam',
             'elm_scin_1',
             'elm_scin_2',
             'elm_scin_3',
             'elm_scin_4',
+            'elm_comnam',
+            'group_field',
             'endemic',
             'vulnerable',
-            'endemic'
+            'listed',
         )
 
 class ObservationTypeSerializer(serializers.ModelSerializer):
@@ -36,7 +35,6 @@ class SourceSerializer(serializers.ModelSerializer):
             'source_name',
             'citation',
             'weblink',
-            'pre_release_review',
         )
 
 class AuVElmSerializer(serializers.ModelSerializer):
@@ -47,7 +45,6 @@ class AuVElmSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuVElm
         fields = (
-            'id',
             'element',
             'huc_12',
             'observation_type',
