@@ -35,16 +35,15 @@ cursor = connection.cursor()
 cursor.execute("""
 DROP TABLE IF EXISTS origins CASCADE;
 CREATE TABLE origins (
-    id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
-    org_id                      INTEGER NOT NULL UNIQUE,
-    org_name                    VARCHAR(32) NOT NULL
+    id                          INTEGER NOT NULL UNIQUE PRIMARY KEY,
+    name                        VARCHAR(32) NOT NULL
 );
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'Origin.csv'))
 f = cutout(f, 'OBJECTID')
 f = rename(f, {
-    'Org_ID':                   'org_id',
-    'Org_Name':                 'org_name',
+    'Org_ID':                   'id',
+    'Org_Name':                 'name',
 })
 f = convertnumbers(f)
 todb(f, connection, 'origins')
@@ -54,22 +53,22 @@ todb(f, connection, 'origins')
 cursor.execute("""
 DROP TABLE IF EXISTS observation_types CASCADE;
 CREATE TABLE observation_types (
-    id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
-    obs_typ_id                  INTEGER UNIQUE,
-    obs_typ_name                VARCHAR(64) NOT NULL UNIQUE,
+    id                          INTEGER UNIQUE PRIMARY KEY,
+    name                        VARCHAR(64) NOT NULL UNIQUE,
     range_obs                   VARCHAR(32),
     current_other               VARCHAR(32),
-    group_                      VARCHAR(32)
+    observation_group           VARCHAR(32)
 );
+CREATE INDEX ON observation_types (id);
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'ObservationType.csv'))
 f = cutout(f, 'OBJECTID')
 f = rename(f, {
-    'ObsTyp_ID':                'obs_typ_id',
-    'ObsTyp_Name':              'obs_typ_name',
+    'ObsTyp_ID':                'id',
+    'ObsTyp_Name':              'name',
     'Range_Obs':                'range_obs',
     'Current_Other':            'current_other',
-    'Group_':                   'group_',
+    'Group_':                   'observation_group',
 })
 f = convertnumbers(f)
 todb(f, connection, 'observation_types')
@@ -80,9 +79,8 @@ todb(f, connection, 'observation_types')
 cursor.execute("""
 DROP TABLE IF EXISTS sources CASCADE;
 CREATE TABLE sources (
-    id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
-    source_id                   INTEGER NOT NULL UNIQUE,
-    source_name                 VARCHAR(256),
+    id                          INTEGER NOT NULL UNIQUE PRIMARY KEY,
+    name                        VARCHAR(256),
     sourcegrp_name              VARCHAR(64),
     use_agree                   TEXT,
     permission_request_needed   VARCHAR(64),
@@ -98,13 +96,13 @@ CREATE TABLE sources (
     count_huc12s                INTEGER,
     count_elm_ids               INTEGER
 );
-CREATE INDEX ON sources (source_id);
+CREATE INDEX ON sources (id);
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'Source.csv'))
 f = cutout(f, 'OBJECTID')
 f = rename(f, {
-    'Source_ID':                 'source_id',
-    'Source_Name':               'source_name',
+    'Source_ID':                 'id',
+    'Source_Name':               'name',
     'SourceGrp_Name':            'sourcegrp_name',
     'Use_agree':                 'use_agree',
     'Permission_request_needed': 'permission_request_needed',
@@ -122,7 +120,7 @@ f = rename(f, {
 })
 f = convertnumbers(f)
 f = convert(f, (
-    'source_id',
+    'id',
     'comment_id',
     'count_huc12s',
     'count_elm_ids',
@@ -134,16 +132,15 @@ todb(f, connection, 'sources')
 cursor.execute("""
 DROP TABLE IF EXISTS habitat_usages CASCADE;
 CREATE TABLE habitat_usages (
-    id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
-    hab_usage_id                INTEGER UNIQUE,
-    hab_usage_name              VARCHAR(32) UNIQUE
+    id                INTEGER NOT NULL UNIQUE PRIMARY KEY,
+    name              VARCHAR(32) UNIQUE
 );
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'HabitatUsage.csv'))
 f = cutout(f, 'OBJECTID')
 f = rename(f, {
-    'HabU_ID':                  'hab_usage_id',
-    'HabU_Name':                'hab_usage_name',
+    'HabU_ID':                  'id',
+    'HabU_Name':                'name',
 })
 f = convertnumbers(f)
 todb(f, connection, 'habitat_usages')
@@ -153,10 +150,10 @@ todb(f, connection, 'habitat_usages')
 cursor.execute("""
 DROP TABLE IF EXISTS elements CASCADE;
 CREATE TABLE elements (
-    id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
-    elm_scinam                  VARCHAR(64),
-    elm_comnam                  VARCHAR(64),
-    group_                      VARCHAR(32) NOT NULL,
+    id                          INTEGER NOT NULL UNIQUE PRIMARY KEY,
+    scientific_name             VARCHAR(64),
+    common_name                 VARCHAR(64),
+    taxonomic_group             VARCHAR(32) NOT NULL,
     fwa_v1                      INTEGER,
     tax_list                    VARCHAR(32),
     g_rank                      VARCHAR(16),
@@ -180,7 +177,6 @@ CREATE TABLE elements (
     family_id                   VARCHAR(5),
     genus_id                    VARCHAR(5),
     species_id                  VARCHAR(5),
-    elm_id                      INTEGER NOT NULL UNIQUE,
     other_id                    VARCHAR(5),
     sensitive_fam               VARCHAR(32),
     ns_endemic                  INTEGER,
@@ -199,15 +195,15 @@ CREATE TABLE elements (
     extinct                     BOOLEAN,
     status                      VARCHAR(32)
 );
-CREATE INDEX ON elements (elm_id);
-CREATE INDEX ON elements (group_);
+CREATE INDEX ON elements (id);
+CREATE INDEX ON elements (taxonomic_group);
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'Elements.csv'))
 f = cutout(f, 'OBJECTID')
 f = rename(f, {
-    'ELM_SCINAM':             'elm_scinam',
-    'ELM_COMNAM':             'elm_comnam',
-    'GROUP_':                 'group_',
+    'ELM_SCINAM':             'scientific_name',
+    'ELM_COMNAM':             'common_name',
+    'GROUP_':                 'taxonomic_group',
     'FWA_v1':                 'fwa_v1',
     'TAX_LIST':               'tax_list',
     'G_Rank':                 'g_rank',
@@ -231,7 +227,7 @@ f = rename(f, {
     'Family_ID':              'family_id',
     'Genus_ID':               'genus_id',
     'Species_ID':             'species_id',
-    'ELM_ID':                 'elm_id',
+    'ELM_ID':                 'id',
     'Other_ID':               'other_id',
     'Sensitive_Fam':          'sensitive_fam',
     'NS_endemic':             'ns_endemic',
@@ -251,7 +247,7 @@ f = rename(f, {
     'Status':                 'status',
 })
 # @todo resolve this hack: Deal with the mussels (multiple rows having elm_id = 81077)
-f = selectnotin(f, 'elm_scinam', [
+f = selectnotin(f, 'scientific_name', [
     'Anodonta californiensis',
     'Anodonta dejecta',
     'Anodonta oregonensis',
@@ -266,13 +262,13 @@ f = sub(f, (
     'family_id',
     'genus_id',
     'species_id',
-    'elm_id',
+    'id',
     'other_id',
 ), ',', '')
 # Convert the new values to integers; this can handle nulls.
 f = convert(f, (
     'fwa_v1',
-    'elm_id',
+    'id',
 ), lambda v: int(v))
 # Don't really have to do this, but seems cleaner.
 f = convert(f, (
@@ -291,10 +287,10 @@ cursor.execute("""
 DROP TABLE IF EXISTS au_v_elms CASCADE;
 CREATE TABLE au_v_elms (
     id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
-    elm_id                      INTEGER REFERENCES elements (elm_id),
+    elm_id                      INTEGER REFERENCES elements (id),
     huc_12                      VARCHAR(12),
-    obs_typ_id                  INTEGER REFERENCES observation_types (obs_typ_id),
-    source_id                   INTEGER REFERENCES sources (source_id),
+    obs_typ_id                  INTEGER REFERENCES observation_types (id),
+    source_id                   INTEGER REFERENCES sources (id),
     frequency                   DOUBLE PRECISION,
     sum_amount                  DOUBLE PRECISION
 );

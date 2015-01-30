@@ -6,14 +6,14 @@ class ElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Element
         fields = (
-            'elm_id',
-            'elm_scinam',
+            'id',
+            'scientific_name',
             'elm_scin_1',
             'elm_scin_2',
             'elm_scin_3',
             'elm_scin_4',
-            'elm_comnam',
-            'group_field',
+            'common_name',
+            'taxonomic_group',
             'endemic',
             'vulnerable',
             'listed',
@@ -23,16 +23,17 @@ class ObservationTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ObservationType
         fields = (
-            'obs_typ_name',
+            'name',
             'range_obs',
             'current_other',
+            'observation_group',
         )
 
 class SourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Source
         fields = (
-            'source_name',
+            'name',
             'citation',
             'weblink',
         )
@@ -52,3 +53,17 @@ class AuVElmSerializer(serializers.ModelSerializer):
             'frequency',
             'sum_amount',
         )
+
+class SpeciesSerializer(serializers.BaseSerializer):
+    def to_representation(self, obj):
+        return {
+            obj.id: {
+                'scientific_name': obj.scientific_name,
+                'alt_scientific_names': obj.alt_scientific_names(),
+                'common_name': obj.common_name,
+                'taxonomic_group': obj.taxonomic_group,
+                'endemic': obj.endemic,
+                'vulnerable': obj.vulnerable,
+                'listed': obj.listed,
+            }
+        }

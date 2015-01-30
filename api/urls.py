@@ -8,6 +8,9 @@ urlpatterns = patterns('',
     url(r'^elements/(?P<pk>[0-9]+)/$', views.ElementDetail.as_view()),
     url(r'^auvelm/$', views.AuvelmList.as_view()),
     url(r'^auvelm/(?P<pk>[0-9]+)/$', views.AuvelmDetail.as_view()),
+
+    url(r'^species/$', views.SpeciesList.as_view()),
+
     url(r'^docs/', include('rest_framework_swagger.urls')),
     ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
