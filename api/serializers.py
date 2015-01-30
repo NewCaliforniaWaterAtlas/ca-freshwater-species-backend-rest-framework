@@ -1,17 +1,16 @@
 from rest_framework import serializers
-from api.models import *
+from api.models import Element, ObservationType, Source, AuVElm
 
 
 class ElementSerializer(serializers.ModelSerializer):
+    alt_scientific_names = serializers.CharField(read_only=True)
+
     class Meta:
         model = Element
         fields = (
             'id',
             'scientific_name',
-            'elm_scin_1',
-            'elm_scin_2',
-            'elm_scin_3',
-            'elm_scin_4',
+            'alt_scientific_names',
             'common_name',
             'taxonomic_group',
             'endemic',
