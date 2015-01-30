@@ -3,8 +3,6 @@ from api.models import Element, ObservationType, Source, AuVElm
 
 
 class ElementSerializer(serializers.ModelSerializer):
-    alt_scientific_names = serializers.CharField(read_only=True)
-
     class Meta:
         model = Element
         fields = (
