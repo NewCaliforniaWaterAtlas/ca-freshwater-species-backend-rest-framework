@@ -15,3 +15,9 @@ SELECT COUNT(DISTINCT (elm_id, huc_12)), huc_12
 FROM au_v_elms
 GROUP BY huc_12
 ORDER BY huc_12;
+
+taxonomic groups for menu
+select count(taxonomic_group), taxonomic_group
+from elements
+group by taxonomic_group
+order by count(taxonomic_group) desc;
