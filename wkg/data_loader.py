@@ -298,7 +298,7 @@ CREATE INDEX ON au_v_elms (elm_id);
 CREATE INDEX ON au_v_elms (huc_12);
 CREATE INDEX ON au_v_elms (elm_id, huc_12);
 """)
-f = fromcsv(os.path.join('wkg', args.subdir, 'AU_v_Elm_sum.csv'))
+f = fromcsv(os.path.join('wkg', args.subdir, 'AU_v_elm_sum.csv'))
 f = cutout(f, 'OID_')
 f = rename(f, {
     'Elm_ID':                   'elm_id',
