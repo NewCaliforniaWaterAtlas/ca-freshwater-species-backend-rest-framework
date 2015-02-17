@@ -36,7 +36,7 @@ cursor.execute("""
 DROP TABLE IF EXISTS origins CASCADE;
 CREATE TABLE origins (
     id                          INTEGER NOT NULL UNIQUE PRIMARY KEY,
-    name                        VARCHAR(32) NOT NULL
+    name                        VARCHAR NOT NULL
 );
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'Origin.csv'))
@@ -54,10 +54,10 @@ cursor.execute("""
 DROP TABLE IF EXISTS observation_types CASCADE;
 CREATE TABLE observation_types (
     id                          INTEGER UNIQUE PRIMARY KEY,
-    name                        VARCHAR(64) NOT NULL UNIQUE,
-    range_obs                   VARCHAR(32),
-    current_other               VARCHAR(32),
-    observation_group           VARCHAR(32)
+    name                        VARCHAR NOT NULL UNIQUE,
+    range_obs                   VARCHAR,
+    current_other               VARCHAR,
+    observation_group           VARCHAR
 );
 CREATE INDEX ON observation_types (id);
 """)
@@ -80,36 +80,36 @@ cursor.execute("""
 DROP TABLE IF EXISTS sources CASCADE;
 CREATE TABLE sources (
     id                          INTEGER NOT NULL UNIQUE PRIMARY KEY,
-    name                        VARCHAR(256),
-    sourcegrp_name              VARCHAR(64),
-    use_agree                   TEXT,
-    permission_request_needed   VARCHAR(64),
-    permission_contact_name     VARCHAR(32),
-    permission_contact_email    VARCHAR(64),
+    name                        VARCHAR,
+    sourcegrp_name              VARCHAR,
+    use_agreement               TEXT,
+    permission_request_needed   VARCHAR,
+    permission_contact_name     VARCHAR,
+    permission_contact_email    VARCHAR,
     permission_status           TEXT,
-    permission                  VARCHAR(32),
+    permission_scale            VARCHAR,
     comment_id                  INTEGER,
     citation                    TEXT,
-    weblink                     VARCHAR(128),
-    pre_release_review          VARCHAR(8),
-    aggregator                  VARCHAR(32),
+    weblink                     VARCHAR,
+    pre_release_review          VARCHAR,
+    aggregator                  VARCHAR,
     count_huc12s                INTEGER,
     count_elm_ids               INTEGER
 );
 CREATE INDEX ON sources (id);
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'Source.csv'))
-f = cutout(f, 'OBJECTID')
+f = cutout(f, 'Status', 'Permission_notes', 'Duplication', 'Jeanette', 'Source_Name', 'Access_date', 'Sort')
 f = rename(f, {
     'Source_ID':                 'id',
-    'Source_Name':               'name',
+    'Source_Name_Full':          'name',
     'SourceGrp_Name':            'sourcegrp_name',
-    'Use_agree':                 'use_agree',
-    'Permission_request_needed': 'permission_request_needed',
+    'Use_agreement':             'use_agreement',
+    'Premission_request_needed': 'permission_request_needed',
     'Permission_contact_name':   'permission_contact_name',
     'Permission_contact_email':  'permission_contact_email',
     'Permission_status':         'permission_status',
-    'Permission':                'permission',
+    'Permission_scale':          'permission_scale',
     'Comment_ID':                'comment_id',
     'Citation':                  'citation',
     'Weblink':                   'weblink',
@@ -133,7 +133,7 @@ cursor.execute("""
 DROP TABLE IF EXISTS habitat_usages CASCADE;
 CREATE TABLE habitat_usages (
     id                INTEGER NOT NULL UNIQUE PRIMARY KEY,
-    name              VARCHAR(32) UNIQUE
+    name              VARCHAR UNIQUE
 );
 """)
 f = fromcsv(os.path.join('wkg', args.subdir, 'HabitatUsage.csv'))
@@ -151,49 +151,49 @@ cursor.execute("""
 DROP TABLE IF EXISTS elements CASCADE;
 CREATE TABLE elements (
     id                          INTEGER NOT NULL UNIQUE PRIMARY KEY,
-    scientific_name             VARCHAR(64),
-    common_name                 VARCHAR(64),
-    taxonomic_group             VARCHAR(32) NOT NULL,
+    scientific_name             VARCHAR,
+    common_name                 VARCHAR,
+    taxonomic_group             VARCHAR NOT NULL,
     fwa_v1                      INTEGER,
-    tax_list                    VARCHAR(32),
-    g_rank                      VARCHAR(16),
-    s_rank                      VARCHAR(32),
-    elm_scin_1                  VARCHAR(64),
-    elm_scin_2                  VARCHAR(64),
-    elm_scin_3                  VARCHAR(64),
-    elm_scin_4                  VARCHAR(64),
-    kingdom                     VARCHAR(32),
-    phylum                      VARCHAR(32),
-    tax_class                   VARCHAR(32),
-    tax_order                   VARCHAR(32),
-    family                      VARCHAR(32),
-    genus                       VARCHAR(32),
-    species                     VARCHAR(32),
-    subsp_var                   VARCHAR(32),
-    kingdom_id                  VARCHAR(5),
-    phylum_id                   VARCHAR(5),
-    tax_class_i                 VARCHAR(5),
-    tax_order_i                 VARCHAR(5),
-    family_id                   VARCHAR(5),
-    genus_id                    VARCHAR(5),
-    species_id                  VARCHAR(5),
-    other_id                    VARCHAR(5),
-    sensitive_fam               VARCHAR(32),
+    tax_list                    VARCHAR,
+    g_rank                      VARCHAR,
+    s_rank                      VARCHAR,
+    elm_scin_1                  VARCHAR,
+    elm_scin_2                  VARCHAR,
+    elm_scin_3                  VARCHAR,
+    elm_scin_4                  VARCHAR,
+    kingdom                     VARCHAR,
+    phylum                      VARCHAR,
+    tax_class                   VARCHAR,
+    tax_order                   VARCHAR,
+    family                      VARCHAR,
+    genus                       VARCHAR,
+    species                     VARCHAR,
+    subsp_var                   VARCHAR,
+    kingdom_id                  VARCHAR,
+    phylum_id                   VARCHAR,
+    tax_class_i                 VARCHAR,
+    tax_order_i                 VARCHAR,
+    family_id                   VARCHAR,
+    genus_id                    VARCHAR,
+    species_id                  VARCHAR,
+    other_id                    VARCHAR,
+    sensitive_fam               VARCHAR,
     ns_endemic                  INTEGER,
     safit_endemic               INTEGER,
     other_endemic               INTEGER,
     endemism_comment            TEXT,
-    fed_list                    VARCHAR(64),
-    state_list                  VARCHAR(64),
-    other_list                  VARCHAR(64),
-    mgtag_list                  VARCHAR(32),
+    fed_list                    VARCHAR,
+    state_list                  VARCHAR,
+    other_list                  VARCHAR,
+    mgtag_list                  VARCHAR,
     listed                      BOOLEAN,
     vulnerable                  BOOLEAN,
     endemic                     BOOLEAN,
     common                      BOOLEAN,
     not_evaluated               BOOLEAN,
     extinct                     BOOLEAN,
-    status                      VARCHAR(32)
+    status                      VARCHAR
 );
 CREATE INDEX ON elements (id);
 CREATE INDEX ON elements (taxonomic_group);
@@ -288,7 +288,7 @@ DROP TABLE IF EXISTS au_v_elms CASCADE;
 CREATE TABLE au_v_elms (
     id                          BIGSERIAL NOT NULL UNIQUE PRIMARY KEY,
     elm_id                      INTEGER REFERENCES elements (id),
-    huc_12                      VARCHAR(12),
+    huc_12                      VARCHAR,
     obs_typ_id                  INTEGER REFERENCES observation_types (id),
     source_id                   INTEGER REFERENCES sources (id),
     frequency                   DOUBLE PRECISION,
