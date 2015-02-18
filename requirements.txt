@@ -1,10 +1,12 @@
 Django==1.7.3
 django-cors-headers==1.0.0
 django-filter==0.9.1
-django-rest-swagger==0.2.8
+django-redis-cache==0.13.0
 djangorestframework==3.0.3
 gunicorn==19.1.1
 honcho==0.5.0
+Markdown==2.5.2
 petl==1.0.1
 psycopg2==2.5.4
 PyYAML==3.11
+redis==2.10.3

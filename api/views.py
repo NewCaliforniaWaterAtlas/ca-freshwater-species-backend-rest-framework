@@ -18,6 +18,9 @@ class ElementFilter(django_filters.FilterSet):
 class ElementList(generics.ListAPIView):
     """
     List all elements.
+
+    May be filtered by `taxonomic_group`, e.g., 'Fishes', 'Mammals', etc.
+
     """
     queryset = Element.objects.all()
     serializer_class = ElementSerializer
