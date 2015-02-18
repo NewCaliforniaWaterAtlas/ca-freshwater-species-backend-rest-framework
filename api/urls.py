@@ -11,7 +11,6 @@ urlpatterns = patterns('',
 
     url(r'^species/$', views.SpeciesList.as_view()),
 
-    url(r'^docs/', include('rest_framework_swagger.urls')),
     ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)
