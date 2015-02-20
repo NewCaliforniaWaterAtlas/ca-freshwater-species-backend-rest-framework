@@ -115,8 +115,8 @@ f = rename(f, {
     'Weblink':                   'weblink',
     'Pre_release_review':        'pre_release_review',
     'Aggregator':                'aggregator',
-    'Count_HUC12s':              'count_huc12s',
-    'Count_Elm_IDs':             'count_elm_ids'
+    'Count_HUC12':               'count_huc12s',
+    'Count_ElmID':               'count_elm_ids'
 })
 f = convertnumbers(f)
 f = convert(f, (
