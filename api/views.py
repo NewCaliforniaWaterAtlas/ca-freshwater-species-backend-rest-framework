@@ -1,10 +1,10 @@
 import django_filters
-from api.models import Element, AuVElm
-from api.serializers import ElementSerializer, AuVElmSerializer, SpeciesSerializer
+from api.models import Element, AuVElm, Huc12
+from api.serializers import *
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework_gis.filters import InBBoxFilter
 
 class ElementFilter(django_filters.FilterSet):
     """
@@ -73,3 +73,205 @@ class SpeciesList(APIView):
         species = Element.objects.all()
         serializer = SpeciesSerializer(species, many=True)
         return Response(dict(species=serializer.data))
+
+
+class Huc12_Z6List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ6Serializer
+    bbox_filter_field = 'z6'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z6Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ6Serializer
+
+
+class Huc12_Z7List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ7Serializer
+    bbox_filter_field = 'z7'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z7Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ7Serializer
+
+
+class Huc12_Z8List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ8Serializer
+    bbox_filter_field = 'z8'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z8Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ8Serializer
+
+
+class Huc12_Z9List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ9Serializer
+    bbox_filter_field = 'z9'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z9Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ9Serializer
+
+
+class Huc12_Z10List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ10Serializer
+    bbox_filter_field = 'z10'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z10Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ10Serializer
+
+
+class Huc12_Z11List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ11Serializer
+    bbox_filter_field = 'z11'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z11Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ11Serializer
+
+
+class Huc12_Z12List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ12Serializer
+    bbox_filter_field = 'z12'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z12Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ12Serializer
+
+
+class Huc12_Z13List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ13Serializer
+    bbox_filter_field = 'z13'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z13Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ13Serializer
+
+
+class Huc12_Z14List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ14Serializer
+    bbox_filter_field = 'z14'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z14Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ14Serializer
+
+
+class Huc12_Z15List(generics.ListAPIView):
+    """
+    List all HUC12s.
+
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ15Serializer
+    bbox_filter_field = 'z15'
+    filter_backends = (InBBoxFilter,)
+    bbox_filter_include_overlapping = True
+
+
+class Huc12_Z15Detail(generics.RetrieveAPIView):
+    """
+    Retrieve a single HUC12.
+    """
+    queryset = Huc12.objects.all()
+    serializer_class = Huc12sZ15Serializer
+
+

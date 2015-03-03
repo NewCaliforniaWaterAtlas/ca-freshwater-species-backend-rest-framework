@@ -157,3 +157,30 @@ class AuVElm(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.huc_12, self.element)
 
+
+class Huc12(models.Model):
+    gid = models.IntegerField()
+    huc_12 = models.CharField(primary_key=True)
+    first_huc8 = models.CharField()
+    first_hu_1 = models.CharField()
+    shape_leng = models.FloatField()
+    shape_area = models.FloatField()
+    area_ha = models.IntegerField()
+    hr_name = models.CharField()
+    geom = models.MultiPolygonField()
+    topogeom = models.MultiPolygonField() # this is not right
+    z6 = models.MultiPolygonField()
+    z7 = models.MultiPolygonField()
+    z8 = models.MultiPolygonField()
+    z9 = models.MultiPolygonField()
+    z10 = models.MultiPolygonField()
+    z11 = models.MultiPolygonField()
+    z12 = models.MultiPolygonField()
+    z13 = models.MultiPolygonField()
+    z14 = models.MultiPolygonField()
+    z15 = models.MultiPolygonField()
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = False
+        db_table = 'huc12s'
