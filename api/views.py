@@ -85,7 +85,7 @@ class TaxonomicGroupsList(APIView):
         for index, tg in enumerate(Element.objects.values('taxonomic_group').annotate(Count('id')).order_by('-id__count')):
             taxonomic_groups.append(TaxonomicGroup(index, tg['taxonomic_group'], tg['id__count']))
         serializer = TaxonomicGroupsSerializer(taxonomic_groups, many=True)
-        return Response(serializer.data)
+        return Response(dict(taxonomic_groups=serializer.data))
 
 
 class Huc12_Z6List(generics.ListAPIView):
