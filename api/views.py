@@ -1,5 +1,6 @@
 import django_filters
-from api.models import Element, AuVElm, Huc12
+from django.db.models import Count
+from api.models import Element, AuVElm, Huc12, TaxonomicGroup
 from api.serializers import *
 from rest_framework import generics
 from rest_framework.response import Response
@@ -73,6 +74,18 @@ class SpeciesList(APIView):
         species = Element.objects.all()
         serializer = SpeciesSerializer(species, many=True)
         return Response(dict(species=serializer.data))
+
+
+class TaxonomicGroupsList(APIView):
+    """
+    List all taxonomic groups and their frequencies.
+    """
+    def get(self, request, format=None):
+        taxonomic_groups = []
+        for index, tg in enumerate(Element.objects.values('taxonomic_group').annotate(Count('id')).order_by('-id__count')):
+            taxonomic_groups.append(TaxonomicGroup(index, tg['taxonomic_group'], tg['id__count']))
+        serializer = TaxonomicGroupsSerializer(taxonomic_groups, many=True)
+        return Response(serializer.data)
 
 
 class Huc12_Z6List(generics.ListAPIView):

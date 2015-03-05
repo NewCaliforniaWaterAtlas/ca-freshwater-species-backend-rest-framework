@@ -184,3 +184,11 @@ class Huc12(models.Model):
     class Meta:
         managed = False
         db_table = 'huc12s'
+
+
+class TaxonomicGroup:
+    def __init__(self, id, name, count):
+        self.id = id
+        self.name = name
+        self.count = count
+

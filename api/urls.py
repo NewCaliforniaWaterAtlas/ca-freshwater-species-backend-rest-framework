@@ -6,6 +6,7 @@ from api import settings, views
 urlpatterns = patterns('',
     url(r'^elements/$', views.ElementList.as_view()),
     url(r'^elements/(?P<pk>[0-9]+)/$', views.ElementDetail.as_view()),
+    url(r'^taxonomic_groups/$', views.TaxonomicGroupsList.as_view()),
     url(r'^auvelm/$', views.AuvelmList.as_view()),
     url(r'^auvelm/(?P<pk>[0-9]+)/$', views.AuvelmDetail.as_view()),
     url(r'^huc12sz6/$', views.Huc12_Z6List.as_view()),
