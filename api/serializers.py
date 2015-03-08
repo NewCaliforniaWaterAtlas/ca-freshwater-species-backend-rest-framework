@@ -74,11 +74,14 @@ class SpeciesSerializer(serializers.BaseSerializer):
 class TaxonomicGroupsSerializer(serializers.BaseSerializer):
     def to_representation(self, obj):
         return {
-            obj.id: {
-                'name': obj.name,
-                'count': obj.count,
-            }
+            'name': obj.name,
+            'count': obj.count,
         }
+
+
+class Huc12sBySpeciesSerializer(serializers.BaseSerializer):
+    def to_representation(self, obj):
+        return obj.huc_12
 
 
 class Huc12sZ6Serializer(GeoFeatureModelSerializer):

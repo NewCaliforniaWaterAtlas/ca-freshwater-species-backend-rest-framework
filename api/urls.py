@@ -31,6 +31,9 @@ urlpatterns = patterns('',
     url(r'^huc12sz15/(?P<pk>[0-9]+)/$', views.Huc12_Z15Detail.as_view()),
 
     url(r'^species/$', views.SpeciesList.as_view()),
+    url(r'^species/(?P<pk>[0-9]{3,5})/$', views.SpeciesDetail.as_view()),
+
+    url(r'^huc12sbyspecies/(?P<pk>[0-9]{3,5})/$', views.Huc12sBySpeciesList.as_view()),
     ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)

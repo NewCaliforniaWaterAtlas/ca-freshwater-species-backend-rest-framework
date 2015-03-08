@@ -141,22 +141,6 @@ class Element(models.Model):
             asn += '%s' % self.elm_scin_4
         return asn.rstrip(', ')
 
-class AuVElm(models.Model):
-    id = models.BigIntegerField(primary_key=True)
-    element = models.ForeignKey(Element, to_field='id', db_column='elm_id')
-    huc_12 = models.CharField(blank=True)
-    observation_type = models.ForeignKey(ObservationType, to_field='id', db_column='obs_typ_id')
-    source = models.ForeignKey(Source, to_field='id', db_column='source_id')
-    frequency = models.FloatField(blank=True, null=True)
-    sum_amount = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'au_v_elms'
-
-    def __unicode__(self):
-        return '%s: %s' % (self.huc_12, self.element)
-
 
 class Huc12(models.Model):
     gid = models.IntegerField()
@@ -186,9 +170,30 @@ class Huc12(models.Model):
         db_table = 'huc12s'
 
 
+class AuVElm(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    element = models.ForeignKey(Element, to_field='id', db_column='elm_id')
+    huc_12 = models.ForeignKey(Huc12, to_field='huc_12', db_column='huc_12')
+    observation_type = models.ForeignKey(ObservationType, to_field='id', db_column='obs_typ_id')
+    source = models.ForeignKey(Source, to_field='id', db_column='source_id')
+    frequency = models.FloatField(blank=True, null=True)
+    sum_amount = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'au_v_elms'
+
+    def __unicode__(self):
+        return '%s: %s' % (self.huc_12, self.element)
+
+
 class TaxonomicGroup:
-    def __init__(self, id, name, count):
-        self.id = id
+    def __init__(self, name, count):
         self.name = name
         self.count = count
 
+
+class Huc12sBySpecies:
+    def __init__(self, huc_12):
+        self.huc_12 = huc_12 # models.ForeignKey(Huc12, to_field='huc_12', db_column='huc_12')
+        # species = [] # models.ForeignKey(Element, to_field='id', db_)

@@ -1,6 +1,6 @@
 import django_filters
 from django.db.models import Count
-from api.models import Element, AuVElm, Huc12, TaxonomicGroup
+from api.models import Element, AuVElm, Huc12, TaxonomicGroup, Huc12sBySpecies
 from api.serializers import *
 from rest_framework import generics
 from rest_framework.response import Response
@@ -39,6 +39,7 @@ class ElementDetail(generics.RetrieveAPIView):
 class AuvelmFilter(django_filters.FilterSet):
     """
     Provide the ability to filter on a group.
+
     """
     taxonomic_group = django_filters.CharFilter(name="element__taxonomic_group")
     listed = django_filters.CharFilter(name="element__listed")
@@ -52,6 +53,7 @@ class AuvelmFilter(django_filters.FilterSet):
 class AuvelmList(generics.ListAPIView):
     """
     List all elements.
+
     """
     queryset = AuVElm.objects.all()
     serializer_class = AuVElmSerializer
@@ -61,6 +63,7 @@ class AuvelmList(generics.ListAPIView):
 class AuvelmDetail(generics.RetrieveAPIView):
     """
     Retrieve a single auvelm.
+
     """
     queryset = AuVElm.objects.all()
     serializer_class = AuVElmSerializer
@@ -69,6 +72,7 @@ class AuvelmDetail(generics.RetrieveAPIView):
 class SpeciesList(APIView):
     """
     List all species.
+
     """
     def get(self, request, format=None):
         species = Element.objects.all()
@@ -76,18 +80,48 @@ class SpeciesList(APIView):
         return Response(dict(species=serializer.data))
 
 
+class SpeciesDetail(APIView):
+    """
+    Retrieve a single species and the HUC12s where it can be found.
+
+    """
+    def get(self, request, pk, format=None):
+        species = Element.objects.filter(pk=pk)
+        #species = Species(pk, s[0].scientific_name, s[0].common_name)
+        #for index, a in enumerate(AuVElm.objects.filter(element_id=pk)):
+        #    species.huc_12s.append(a.huc_12)
+        serializer = SpeciesSerializer(species, many=True)
+        return Response(dict(species=serializer.data))
+
+
 class TaxonomicGroupsList(APIView):
     """
     List all taxonomic groups and their frequencies.
+
     """
     def get(self, request, format=None):
         taxonomic_groups = []
-        for index, tg in enumerate(Element.objects.values('taxonomic_group').annotate(Count('id')).order_by('-id__count')):
-            taxonomic_groups.append(TaxonomicGroup(index, tg['taxonomic_group'], tg['id__count']))
+        for i, tg in enumerate(Element.objects.values('taxonomic_group').annotate(Count('id')).order_by('-id__count')):
+            taxonomic_groups.append(TaxonomicGroup(tg['taxonomic_group'], tg['id__count']))
         serializer = TaxonomicGroupsSerializer(taxonomic_groups, many=True)
         return Response(dict(taxonomic_groups=serializer.data))
 
 
+class Huc12sBySpeciesList(APIView):
+    """
+    List all Huc12s inhabited by a species.
+
+    """
+    def get(self, request, pk, format=None):
+        hbs = []
+        for i, a in enumerate(AuVElm.objects.filter(element_id=pk).distinct('huc_12')):
+            hbs.append(Huc12sBySpecies(a.huc_12.huc_12))
+        serializer = Huc12sBySpeciesSerializer(hbs, many=True)
+        return Response(serializer.data)
+
+
+# Refactor all of these into a single List, Detail pair
+#
 class Huc12_Z6List(generics.ListAPIView):
     """
     List all HUC12s.
@@ -103,6 +137,7 @@ class Huc12_Z6List(generics.ListAPIView):
 class Huc12_Z6Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ6Serializer
@@ -123,6 +158,7 @@ class Huc12_Z7List(generics.ListAPIView):
 class Huc12_Z7Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ7Serializer
@@ -143,6 +179,7 @@ class Huc12_Z8List(generics.ListAPIView):
 class Huc12_Z8Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ8Serializer
@@ -163,6 +200,7 @@ class Huc12_Z9List(generics.ListAPIView):
 class Huc12_Z9Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ9Serializer
@@ -183,6 +221,7 @@ class Huc12_Z10List(generics.ListAPIView):
 class Huc12_Z10Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ10Serializer
@@ -203,6 +242,7 @@ class Huc12_Z11List(generics.ListAPIView):
 class Huc12_Z11Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ11Serializer
@@ -223,6 +263,7 @@ class Huc12_Z12List(generics.ListAPIView):
 class Huc12_Z12Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ12Serializer
@@ -243,6 +284,7 @@ class Huc12_Z13List(generics.ListAPIView):
 class Huc12_Z13Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ13Serializer
@@ -263,6 +305,7 @@ class Huc12_Z14List(generics.ListAPIView):
 class Huc12_Z14Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ14Serializer
@@ -283,6 +326,7 @@ class Huc12_Z15List(generics.ListAPIView):
 class Huc12_Z15Detail(generics.RetrieveAPIView):
     """
     Retrieve a single HUC12.
+
     """
     queryset = Huc12.objects.all()
     serializer_class = Huc12sZ15Serializer
