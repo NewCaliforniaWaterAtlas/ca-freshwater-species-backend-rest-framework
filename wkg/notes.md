@@ -76,7 +76,7 @@ alter sequence topology_id_seq restart;
 ```
 
 
-Trying this for 0.0080, 0.0012, 0.0016, 0.0024, 0.0032, 0.0040
+Trying this for 0.1, 0.01, 0.001, 0.008, 0.0012, 0.0016, 0.0024, 0.0032, 0.0040
 
 ```
 -- Create a topology
@@ -89,9 +89,41 @@ SELECT AddTopoGeometryColumn('huc12s_topo', 'public', 'huc12s', 'topogeom', 'MUL
 UPDATE huc12s SET topogeom = toTopoGeom(geom, 'huc12s_topo', 1);
 
 -- Simplify all edges up to x degrees (original was meters, e.g., 10000 units)
-SELECT SimplifyEdgeGeom('huc12s_topo', edge_id, 0.008) FROM huc12s_topo.edge;
+SELECT SimplifyEdgeGeom('huc12s_topo', edge_id, x) FROM huc12s_topo.edge;
 
 -- Convert the TopoGeometries to Geometries for visualization
-ALTER TABLE huc12s ADD simp_008 GEOMETRY;
-UPDATE huc12s SET simp_008 = topogeom::geometry;
+ALTER TABLE huc12s ADD simp_x GEOMETRY;
+UPDATE huc12s SET simp_x = topogeom::geometry;
 ```
+
+So, looking to reduce the number of decimal places from this work; default is 15!
+SELECT COUNT(gid) FROM huc12s WHERE ST_IsValid(ST_AsText(ST_SnapToGrid(simp_008, 0.001))) IS FALSE;
+
+tolerance                                 | 0.1   | 0.01  | 0.001 | 0.008 | 0.0016 | 0.0032 | 0.0001
+0.001                                     | 27    | 27    | 27    | 69    | 61     | 54     | 27
+0.0001                                    | 6     | 6     | 6     | 8     | 6      | 7      | 6
+0.00001                                   | 2     | 2     | 2     | 2     | 2      | 3      | 2
+0.000001                                  | 2     | 2     | 2     | 2     | 2      | 2      | 2
+0.0000001                                 | 0     | 0     | 0     | 0     | 0      | 0      | 0
+SELECT sum(ST_NPoints(x)) FROM huc12s;    | 43455 | 42852 | 43058 | 84741 | 79661  | 77973  |
+
+Then, with the row that produces 0:
+UPDATE huc12s SET simp_x = ST_SnapToGrid(simp_x, 0.0000001);
+
+
+update huc12s set simp_01 = st_astext(st_snaptogrid(st_simplify(topogeom, 0), 0.00001));
+
+UGH
+
+* * *
+
+update huc12s set z6 = st_snaptogrid(st_simplify(topogeom, .01), 0.01);
+update huc12s set z7 = z6;
+update huc12s set z8 = st_snaptogrid(st_simplify(topogeom, .001), 0.001);
+update huc12s set z9 = z8;
+update huc12s set z10 = z8;
+update huc12s set z11 = z8;
+update huc12s set z12 = st_snaptogrid(st_simplify(topogeom, .0001), 0.0001);
+update huc12s set z13 = z12;
+update huc12s set z14 = z12;
+update huc12s set z15 = z12;
